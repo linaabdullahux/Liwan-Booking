@@ -13,11 +13,11 @@ const I18N = {
 
     hero_eyebrow: "قاعات اجتماعات ليوان أرُب",
     hero_title: "احجز قاعة اجتماعك في دقيقة",
-    hero_lede: "اختر القاعة، حدد التاريخ والمدة، واحصل على تأكيد فوري بالبريد الإلكتروني — بدون الحاجة لإنشاء حساب.",
+    hero_lede: "اختر القاعة، حدد التاريخ والمدة، واحصل على تأكيد فوري بالبريد الإلكتروني.",
     hero_cta: "ابدأ الحجز",
 
     rooms_title: "قاعاتنا",
-    room_meeting_name: "قاعة الاجتماعات",
+    room_meeting_name: "قاعة الاجتماعات التنفيذية",
     room_meeting_desc: "مساحة رسمية مجهزة للاجتماعات وجلسات العمل.",
     room_brainstorm_name: "قاعة العصف الذهني",
     room_brainstorm_desc: "بيئة مفتوحة ومرنة لجلسات الأفكار والتعاون.",
@@ -143,14 +143,14 @@ const I18N = {
   },
 
   en: {
-    site_name: "Leewan Arab",
+    site_name: "Liwan Arob",
     nav_book: "Book now",
     nav_admin_login: "Admin sign in",
     nav_admin: "Admin panel",
 
-    hero_eyebrow: "Leewan Arab meeting rooms",
+    hero_eyebrow: "Liwan Arob meeting rooms",
     hero_title: "Book your meeting room in a minute",
-    hero_lede: "Pick a room, choose your date and duration, and get an instant email confirmation — no account needed.",
+    hero_lede: "Pick a room, choose your date and duration, and get an instant email confirmation",
     hero_cta: "Start booking",
 
     rooms_title: "Our rooms",
