@@ -277,7 +277,12 @@ html[lang="en"] .hero{
   box-shadow: var(--shadow-sm);
   transition: .2s var(--ease);
   width: 100%;
+
+  display: flex;              /* مهم */
+  flex-direction: column;     /* ترتيب عمودي */
+  justify-content: space-between; /* يخلي الزر دائمًا تحت */
 }
+
 
 .room-card:hover{
   box-shadow: var(--shadow-md);
