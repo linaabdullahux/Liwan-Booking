@@ -114,15 +114,16 @@ img{ max-width: 100%; display:block; }
   top: 0;
   inset-inline-start: 0;
   width: 40px;
-  height: 468px; /* the pattern's own natural proportion at this width (239×2796 source) — shown once, never tiled */
+  height: 100%; /* امتداد كامل الصفحة */
   background-image: url("../assets/img/pattern.png");
-  background-repeat: no-repeat;
-  background-size: 40px auto;
+  background-repeat: no-repeat; /* بدون تكرار */
+  background-size: 40px 100%; /* يمد الصورة عموديًا */
   background-position: top center;
   opacity: .95;
   pointer-events: none;
   z-index: 0;
 }
+
 [dir="rtl"] .pattern-rail{ transform: none; }
 [dir="ltr"] .pattern-rail{ transform: scaleX(-1); }
 
@@ -131,9 +132,10 @@ img{ max-width: 100%; display:block; }
   z-index: 1;
   max-width: 100%;
   margin: 0 auto;
-  padding-inline-start: 64px; /* clears the pattern rail (40px) + a real gap */
+  padding-inline-start: 64px;
   padding-inline-end: 20px;
 }
+
 
 /* ---------- header ---------- */
 .site-header{
