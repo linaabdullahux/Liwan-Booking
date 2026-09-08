@@ -109,12 +109,12 @@ img{ max-width: 100%; display:block; }
 }
 /* مسافة بين النمط والمحتوى في اللغة العربية */
 html[lang="ar"] .content-wrapper{
-  padding-right: 70px; /* عدّلي الرقم حسب المسافة اللي تبينها */
+  padding-right: 55px; /* عدّلي الرقم حسب المسافة اللي تبينها */
 }
 
 /* مسافة بين النمط والمحتوى في اللغة الإنجليزية */
 html[lang="en"] .content-wrapper{
-  padding-left: 70px;
+  padding-left: 55px;
 }
 
 
