@@ -107,7 +107,7 @@ img{ max-width: 100%; display:block; }
   position: absolute;
   top: 120px;
   bottom: 0;
-  width: 40px;
+  width: 50px;
 
   background-image: url("../assets/img/pattern.png");
   background-repeat: no-repeat;
