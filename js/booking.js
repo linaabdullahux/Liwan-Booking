@@ -249,9 +249,17 @@ document.getElementById("submit-booking").addEventListener("click", async ()=>{
       guestEmails: state.guests,
     });
     location.href = `confirmation.html?id=${result.id}&token=${result.cancel_token}&lang=${getLang()}`;
-  }catch(e){
-    console.error(e);
-    const msg = String(e.message || e);
+  } catch(e){
+    console.error("BOOKING ERROR:", e);
+    const msg = String(
+      e?.message ||
+      e?.details ||
+      e?.hint ||
+      e ||
+      "Unknown error"
+    );
+
+    showError("خطأ الحجز: " + msg);
     if (msg.includes("23P01") || msg.toLowerCase().includes("exclu")){
       showError(t("error_double_book"));
       loadSlots();
