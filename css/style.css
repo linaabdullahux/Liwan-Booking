@@ -107,6 +107,16 @@ img{ max-width: 100%; display:block; }
   display: flex;
   flex-direction: column;
 }
+/* مسافة بين النمط والمحتوى في اللغة العربية */
+html[lang="ar"] .content-wrapper{
+  padding-right: 70px; /* عدّلي الرقم حسب المسافة اللي تبينها */
+}
+
+/* مسافة بين النمط والمحتوى في اللغة الإنجليزية */
+html[lang="en"] .content-wrapper{
+  padding-left: 70px;
+}
+
 
 @media (max-width: 430px){
   .shell{ box-shadow: none; }
