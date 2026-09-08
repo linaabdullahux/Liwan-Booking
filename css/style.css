@@ -112,18 +112,18 @@ img{ max-width: 100%; display:block; }
   .shell{ box-shadow: none; }
 }
 
-/* Pattern Rail */
+/* Pattern Rail — خلف بطاقات الغرف */
 .pattern-rail{
   position: absolute;
   top: 120px;
   bottom: 0;
-  width: 50px;
+  width: 60px;
 
   background-image: url("../assets/img/pattern.png");
   background-repeat: no-repeat;
   background-size: cover; /* ممتد كامل الصفحة */
   background-position: top;
-  opacity: .55;
+  opacity: .45;
   pointer-events: none;
   z-index: 0;
 }
@@ -208,7 +208,11 @@ html[lang="en"] .pattern-rail{
 /* Hero */
 .hero{
   padding: var(--space-7) 0 var(--space-6);
-  text-align: center;
+  text-align: right; /* محاذاة يمين */
+}
+
+html[lang="en"] .hero{
+  text-align: left; /* محاذاة يسار */
 }
 
 .hero h1{
@@ -241,14 +245,16 @@ html[lang="en"] .pattern-rail{
 .btn-outline{ background: transparent; border:1px solid var(--border); }
 .btn-danger{ background: transparent; border:1px solid var(--maroon); color: var(--maroon); }
 
-/* كارد القاعات */
+/* كارد القاعات — جنب بعض */
 .rooms-grid{
   display:grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr); /* جنب بعض */
+  gap: 14px; /* مسافة قريبة */
   margin: var(--space-5) auto;
-  width: 90%;
+  width: 95%;
   text-align: center;
+  position: relative;
+  z-index: 2; /* فوق النمط */
 }
 
 .room-card{
@@ -259,7 +265,6 @@ html[lang="en"] .pattern-rail{
   box-shadow: var(--shadow-sm);
   transition: .2s var(--ease);
   width: 100%;
-  margin: 0 auto;
 }
 
 .room-card:hover{
