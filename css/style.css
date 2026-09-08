@@ -259,14 +259,15 @@ html[lang="en"] .hero{
 .rooms-grid{
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* كاردين جنب بعض */
-  gap: 16px; /* مسافة بينهم */
-  
-  width: fit-content; /* أهم نقطة — يخلي العرض قد الكاردين فقط */
-  margin: 0 auto;     /* يخليهم في المنتصف بالضبط */
-  
+  gap: 16px;
+
+  width: fit-content;   /* أهم نقطة — يخلي عرض الـ grid قد الكاردين فقط */
+  margin: 0 auto;       /* يخليهم في المنتصف تمامًا */
+
   position: relative;
   z-index: 2; /* فوق النمط */
 }
+
 
 
 .room-card{
