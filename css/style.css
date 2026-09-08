@@ -66,17 +66,27 @@
 *{ box-sizing: border-box; }
 html,body{ margin:0; padding:0; }
 
+/* اتجاه النص حسب اللغة */
+html[lang="ar"] body{
+  direction: rtl;
+  text-align: right;
+  font-family: var(--font-ar);
+}
+
+html[lang="en"] body{
+  direction: ltr;
+  text-align: left;
+  font-family: var(--font-en);
+}
+
 body{
   background: #E9E5DA;
   color: var(--ink);
-  font-family: var(--font-ar);
   line-height: 1.6;
   min-height: 100vh;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
 }
-
-html[lang="en"] body{ font-family: var(--font-en); }
 
 a{ color: inherit; text-decoration: none; }
 button{ font-family: inherit; cursor: pointer; }
@@ -111,7 +121,8 @@ img{ max-width: 100%; display:block; }
 
   background-image: url("../assets/img/pattern.png");
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover; /* ممتد كامل الصفحة */
+  background-position: top;
   opacity: .55;
   pointer-events: none;
   z-index: 0;
@@ -128,6 +139,7 @@ html[lang="en"] .pattern-rail{
   left: 0;
   right: auto;
 }
+
 /* Header */
 .site-header{
   position: relative;
@@ -155,6 +167,26 @@ html[lang="en"] .pattern-rail{
 }
 .brand-name{ font-size: 14px; color: var(--ink-soft); }
 
+/* Header Nav */
+.header-nav{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* زر الدخول كمشرف */
+.header-manage-link{
+  font-size: 13px;
+  color: var(--ink-soft);
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.header-manage-link:hover{
+  background: var(--brown);
+  color: var(--white);
+}
+
 /* Language Toggle */
 .lang-toggle{
   display:flex;
@@ -162,12 +194,10 @@ html[lang="en"] .pattern-rail{
   border-radius: 999px;
   overflow:hidden;
   background: var(--surface);
-  margin-left: auto;
-  transform: translateX(-10px);
 }
 .lang-toggle a{
-  padding: 6px 16px;
-  font-size: 13px;
+  padding: 4px 10px; /* أصغر */
+  font-size: 12px;
   color: var(--ink-soft);
 }
 .lang-toggle a.active{
@@ -214,24 +244,35 @@ html[lang="en"] .pattern-rail{
 /* كارد القاعات */
 .rooms-grid{
   display:grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-5);
-  margin: var(--space-6) 0 var(--space-8);
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin: var(--space-5) auto;
+  width: 90%;
   text-align: center;
 }
 
 .room-card{
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
   box-shadow: var(--shadow-sm);
   transition: .2s var(--ease);
+  width: 100%;
+  margin: 0 auto;
 }
 
 .room-card:hover{
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
+}
+
+.room-card h3{
+  font-size: 20px;
+}
+
+.room-card p{
+  font-size: 13px;
 }
 
 .room-card .btn{
