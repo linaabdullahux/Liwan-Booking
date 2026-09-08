@@ -110,30 +110,25 @@ img{ max-width: 100%; display:block; }
    into it), running the full frame height on the side opposite the
    text. */
 /* ---------- decorative side pattern ---------- */
-.pattern-rail {
+.pattern-rail{
   position: absolute;
 
-  /* يبدأ تحت الهيدر */
-  top: 120px;
+  /* يبدأ بعد الهيدر */
+  top: 84px;
   bottom: 0;
 
-  /* ثابت دائمًا على اليسار */
+  /* ثابت على اليسار */
   left: 0;
-
   width: 40px;
-
   background-image: url("../assets/img/pattern.png");
 
-  /* تكرار عمودي إلى نهاية الصفحة */
+  /* يستمر إلى نهاية الصفحة */
   background-repeat: repeat-y;
 
-  /* لا تمدد الصورة */
+  /* يحافظ على أبعاد الصورة */
   background-size: 40px auto;
-
   background-position: top left;
-
-  opacity: .60;
-
+  opacity: .55;
   pointer-events: none;
   z-index: 0;
 }
@@ -149,27 +144,25 @@ img{ max-width: 100%; display:block; }
 
 
 /* ---------- header ---------- */
-.site-header {
+.site-header{
   position: relative;
   z-index: 5;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   width: 100%;
+  height: 120px;
 
   /* المربع الخلفي */
-  min-height: 120px;
   background: #FAF9F6;
 
-  /* الشادو الموجود أسفل المربع */
+  /* الشادو تحت المربع */
   box-shadow:
-    0 8px 18px rgba(29, 29, 27, 0.10),
-    0 3px 8px rgba(29, 29, 27, 0.06);
+    0 8px 16px rgba(29, 29, 27, .10),
+    0 3px 6px rgba(29, 29, 27, .05);
 
-  padding: var(--space-4) 20px;
-  padding-inline-start: 64px;
+  padding: 16px 20px;
+  padding-left: 64px;
   margin: 0 auto;
 }
 .brand{ display:flex; align-items:center; gap: var(--space-3); }
