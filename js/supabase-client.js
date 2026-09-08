@@ -30,16 +30,28 @@ async function apiGetBusyRanges(roomId, dateStr){
   return data;
 }
 
-async function apiCreateBooking({ roomId, start, end, companyId, email, notes, guestEmails }){
+async function apiCreateBooking({
+  roomId,
+  start,
+  end,
+  companyId,
+  email,
+  notes,
+  guestEmails
+}) {
   const { data, error } = await sb.rpc("create_booking", {
     p_room_id: roomId,
     p_start: start,
     p_end: end,
-    p_company_id: companyId,
+    p_company_id: companyId || null,
     p_email: email,
     p_notes: notes || null,
-    p_guest_emails: guestEmails && guestEmails.length ? guestEmails : null,
+    p_guest_emails:
+      guestEmails && guestEmails.length
+        ? guestEmails
+        : null,
   });
+
   if (error) throw error;
   return data && data[0];
 }
