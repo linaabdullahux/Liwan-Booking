@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ليوان أرُب — حجز قاعات الاجتماعات</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title-key="hero_title">
+<div class="shell">
+  <div class="pattern-rail" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="brand">
+      <img src="assets/img/logo.png" alt="ليوان أرُب" class="brand-logo">
+    </div>
+    <nav class="header-nav">
+      <a data-href="/admin/login.html" href="admin/login.html" class="header-manage-link" data-i18n="nav_admin_login">الدخول كمشرف</a>
+      <div class="lang-toggle">
+        <a href="#" data-lang="ar">AR</a>
+        <a href="#" data-lang="en">EN</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1 data-i18n="hero_title">احجز قاعة اجتماعك في دقيقة</h1>
+      <p class="lede" data-i18n="hero_lede">اختر القاعة، حدد التاريخ والمدة، واحصل على تأكيد فوري بالبريد الإلكتروني.</p>
+    </section>
+
+    <section>
+      <h2 data-i18n="rooms_title">قاعاتنا</h2>
+      <div class="rooms-grid" id="rooms-grid">
+        <!-- room cards injected below -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-credit">
+      <span data-i18n="footer_credit">إنشاء وتطوير بواسطة لينا</span>
+      <a href="https://www.linkedin.com/in/linaalasmari" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn — Lina Alasmari" class="footer-linkedin">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z"/>
+        </svg>
+      </a>
+    </p>
+    <p style="margin:0;">
+      <span data-i18n="footer_rights">جميع الحقوق محفوظة - ليوان أرُب © 2026</span>
+    </p>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  const ROOM_DESC = {
+    meeting:    { ar: "مساحة رسمية مجهزة للاجتماعات وجلسات العمل.", en: "A formal space equipped for meetings and work sessions." },
+    brainstorm: { ar: "بيئة مفتوحة ومرنة لجلسات الأفكار والتعاون.", en: "An open, flexible space for ideas and collaboration." },
+  };
+
+  async function renderRooms(){
+    const grid = document.getElementById("rooms-grid");
+    try{
+      const rooms = await apiGetRooms();
+      grid.innerHTML = rooms.map(r => `
+        <article class="room-card">
+          <h3>${getLang()==="en" ? r.name_en : r.name_ar}</h3>
+          <p>${(ROOM_DESC[r.slug] && ROOM_DESC[r.slug][getLang()]) || ""}</p>
+          <a class="btn btn-outline btn-sm" href="booking.html?room=${r.slug}&lang=${getLang()}" data-i18n="room_select_cta">احجز هذه القاعة</a>
+        </article>
+      `).join("");
+      applyI18n();
+    }catch(e){
+      // Fallback static cards if Supabase isn't configured yet, so the
+      // page still looks right during design review.
+      grid.innerHTML = `
+        <article class="room-card">
+          <h3 data-i18n="room_meeting_name">قاعة الاجتماعات</h3>
+          <p data-i18n="room_meeting_desc">مساحة رسمية مجهزة للاجتماعات وجلسات العمل.</p>
+          <a class="btn btn-outline btn-sm" href="booking.html?room=meeting" data-i18n="room_select_cta">احجز هذه القاعة</a>
+        </article>
+        <article class="room-card">
+          <h3 data-i18n="room_brainstorm_name">قاعة العصف الذهني</h3>
+          <p data-i18n="room_brainstorm_desc">بيئة مفتوحة ومرنة لجلسات الأفكار والتعاون.</p>
+          <a class="btn btn-outline btn-sm" href="booking.html?room=brainstorm" data-i18n="room_select_cta">احجز هذه القاعة</a>
+        </article>`;
+      applyI18n();
+      console.warn("Supabase not reachable yet — showing placeholder rooms.", e);
+    }
+  }
+  renderRooms();
+</script>
+</body>
+</html>

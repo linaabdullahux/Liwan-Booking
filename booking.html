@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>احجز — ليوان أرُب</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title-key="hero_cta">
+<div class="shell">
+  <div class="pattern-rail" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" data-href="/" href="index.html">
+      <img src="assets/img/logo.png" alt="ليوان أرُب" class="brand-logo">
+    </a>
+    <div class="lang-toggle">
+      <a href="#" data-lang="ar">AR</a>
+      <a href="#" data-lang="en">EN</a>
+    </div>
+  </header>
+
+  <main class="container" style="max-width:640px;">
+    <p class="room-context" id="room-context"></p>
+
+    <div class="stepper" id="stepper">
+      <span class="step-pill active" data-step="1"><span class="num">1</span><span data-i18n="step_datetime">الوقت</span></span>
+      <span class="step-pill" data-step="2"><span class="num">2</span><span data-i18n="step_details">بياناتك</span></span>
+      <span class="step-pill" data-step="3"><span class="num">3</span><span data-i18n="step_confirm">التأكيد</span></span>
+    </div>
+
+    <div id="form-alert"></div>
+
+    <!-- Step 1: date, duration, time -->
+    <section class="card" data-step-panel="1">
+      <h2 data-i18n="label_date">اختر التاريخ</h2>
+      <input class="input" type="date" id="date-input" style="margin-bottom:20px;">
+
+      <label class="field-label" data-i18n="label_duration">مدة الحجز</label>
+      <div class="duration-grid" id="duration-grid" style="margin-bottom:20px;"></div>
+
+      <label class="field-label" data-i18n="label_time">الوقت المتاح</label>
+      <div class="time-grid" id="time-grid"></div>
+      <p class="alert alert-info hidden" id="no-slots-msg" data-i18n="no_slots"></p>
+
+      <div style="margin-top:20px; display:flex; justify-content:flex-end;">
+        <button class="btn btn-primary" id="to-step-2" disabled data-i18n="btn_continue">متابعة</button>
+      </div>
+    </section>
+
+    <!-- Step 2: details -->
+    <section class="card hidden" data-step-panel="2">
+      <h2 data-i18n="step_details">بياناتك</h2>
+      <label class="field-label" data-i18n="label_company">اسم الشركة</label>
+      <select class="select" id="cust-company" style="margin-bottom:16px;"></select>
+
+      <label class="field-label" data-i18n="label_email">البريد الإلكتروني</label>
+      <input class="input" type="email" id="cust-email" style="margin-bottom:16px;">
+
+      <label class="field-label" data-i18n="label_notes">ملاحظات (اختياري)</label>
+      <textarea class="input" id="cust-notes" data-i18n-placeholder="placeholder_notes" style="margin-bottom:16px;"></textarea>
+
+      <label class="field-label" data-i18n="label_guests">دعوة ضيف</label>
+      <div class="guest-row">
+        <input class="input" type="email" id="guest-email" data-i18n-placeholder="placeholder_guest_email">
+        <button class="btn btn-outline btn-sm" id="add-guest" data-i18n="btn_add_guest">إضافة</button>
+      </div>
+      <div id="guest-tags" style="margin-bottom:6px;"></div>
+      <p style="font-size:12px; color:var(--ink-soft);" data-i18n="guests_hint"></p>
+
+      <div style="margin-top:20px; display:flex; justify-content:space-between;">
+        <button class="btn btn-outline" id="back-to-1" data-i18n="btn_back">رجوع</button>
+        <button class="btn btn-primary" id="to-step-3" data-i18n="btn_continue">متابعة</button>
+      </div>
+    </section>
+
+    <!-- Step 3: review + confirm -->
+    <section class="card hidden" data-step-panel="3">
+      <h2 data-i18n="summary_title">ملخص الحجز</h2>
+      <div id="summary-box"></div>
+      <div style="margin-top:20px; display:flex; justify-content:space-between;">
+        <button class="btn btn-outline" id="back-to-2" data-i18n="btn_back">رجوع</button>
+        <button class="btn btn-primary" id="submit-booking" data-i18n="btn_confirm_booking">تأكيد الحجز</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-credit">
+      <span data-i18n="footer_credit">إنشاء وتطوير بواسطة لينا</span>
+      <a href="https://www.linkedin.com/in/linaalasmari" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn — Lina Alasmari" class="footer-linkedin">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z"/>
+        </svg>
+      </a>
+    </p>
+    <p style="margin:0;">
+      <span data-i18n="footer_rights">جميع الحقوق محفوظة - ليوان أرُب © 2026</span>
+    </p>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/booking.js"></script>
+</body>
+</html>

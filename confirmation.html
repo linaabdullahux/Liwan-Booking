@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حجزك — ليوان أرُب</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="shell">
+  <div class="pattern-rail" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" data-href="/" href="index.html">
+      <img src="assets/img/logo.png" alt="ليوان أرُب" class="brand-logo">
+    </a>
+    <div class="lang-toggle">
+      <a href="#" data-lang="ar">AR</a>
+      <a href="#" data-lang="en">EN</a>
+    </div>
+  </header>
+
+  <main class="container" style="max-width:640px;">
+    <p class="room-context hidden" id="room-context"></p>
+    <div class="stepper hidden" id="confirm-stepper">
+      <span class="step-pill done" data-step="1"><span class="num">1</span><span data-i18n="step_datetime">الوقت</span></span>
+      <span class="step-pill done" data-step="2"><span class="num">2</span><span data-i18n="step_details">بياناتك</span></span>
+      <span class="step-pill done" data-step="3"><span class="num">3</span><span data-i18n="step_confirm">التأكيد</span></span>
+    </div>
+
+    <!-- Lookup box: shown only when there's no id/token in the URL -->
+    <section class="card hidden" id="lookup-box">
+      <h2 data-i18n="manage_title">إدارة حجزك</h2>
+      <p style="color:var(--ink-soft); font-size:14px;" data-i18n="manage_lede"></p>
+      <input class="input" id="lookup-input" placeholder="https://.../confirmation.html?id=...&token=..." style="margin-bottom:16px;">
+      <button class="btn btn-primary" id="lookup-go" data-i18n="btn_continue">متابعة</button>
+      <p id="lookup-error" class="alert alert-error hidden" style="margin-top:16px;"></p>
+    </section>
+
+    <!-- Booking detail card -->
+    <section class="card hidden" id="detail-box">
+      <div class="confirm-badge">✓</div>
+      <h2 data-i18n="confirm_title">تم تأكيد حجزك بنجاح</h2>
+      <p style="color:var(--ink-soft);" data-i18n="confirm_lede"></p>
+      <div id="status-alert"></div>
+
+      <button class="btn btn-outline" id="reveal-details-btn" data-i18n="confirm_view_details" style="margin-top:8px;"></button>
+
+      <div id="details-panel" class="hidden">
+        <div id="summary-box" style="margin:20px 0;"></div>
+
+        <div class="confirm-actions">
+          <a class="btn btn-outline" id="ics-link" download="booking.ics" data-i18n="confirm_add_calendar">إضافة إلى التقويم</a>
+          <button class="btn btn-outline" id="edit-btn" data-i18n="confirm_edit">تعديل الحجز</button>
+          <button class="btn btn-danger" id="cancel-btn" data-i18n="confirm_cancel">إلغاء الحجز</button>
+        </div>
+
+        <!-- inline reschedule panel -->
+        <div class="card hidden" id="edit-panel" style="margin-top:20px; background:var(--bg);">
+          <label class="field-label" data-i18n="label_date"></label>
+          <input class="input" type="date" id="edit-date" style="margin-bottom:12px;">
+          <label class="field-label" data-i18n="label_time"></label>
+          <div class="time-grid" id="edit-time-grid"></div>
+          <div style="margin-top:16px; display:flex; gap:10px;">
+            <button class="btn btn-primary btn-sm" id="save-reschedule" data-i18n="btn_confirm_booking"></button>
+            <button class="btn btn-outline btn-sm" id="cancel-edit" data-i18n="btn_back"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- cancel confirmation modal -->
+    <div class="modal-backdrop hidden" id="cancel-modal">
+      <div class="modal">
+        <p data-i18n="cancel_confirm_q"></p>
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button class="btn btn-danger btn-sm" id="cancel-yes" data-i18n="cancel_yes"></button>
+          <button class="btn btn-outline btn-sm" id="cancel-no" data-i18n="cancel_no"></button>
+        </div>
+      </div>
+    </div>
+
+    <section class="card hidden" id="not-found-box">
+      <p class="alert alert-error" data-i18n="booking_not_found"></p>
+      <a class="btn btn-outline" data-href="/" href="index.html" data-i18n="confirm_new"></a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-credit">
+      <span data-i18n="footer_credit">إنشاء وتطوير بواسطة لينا</span>
+      <a href="https://www.linkedin.com/in/linaalasmari" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn — Lina Alasmari" class="footer-linkedin">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z"/>
+        </svg>
+      </a>
+    </p>
+    <p style="margin:0;">
+      <span data-i18n="footer_rights">جميع الحقوق محفوظة - ليوان أرُب © 2026</span>
+    </p>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/confirmation.js"></script>
+</body>
+</html>

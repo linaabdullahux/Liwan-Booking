@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم — ليوان أرُب</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a class="brand" href="../index.html">
+      <img src="../assets/img/logo.png" alt="ليوان أرُب" style="height:22px;">
+    </a>
+    <nav class="admin-nav">
+      <a href="#" data-filter="today" class="active" data-i18n="admin_today">حجوزات اليوم</a>
+      <a href="#" data-filter="week" data-i18n="admin_week">حجوزات الأسبوع</a>
+      <a href="#" data-filter="month" data-i18n="admin_month">حجوزات الشهر</a>
+      <a href="#" data-filter="all" data-i18n="admin_all">كل الحجوزات</a>
+    </nav>
+    <div style="margin-top:auto; padding-top:24px;">
+      <div class="lang-toggle" style="background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.2); margin-bottom:12px;">
+        <a href="#" data-lang="ar" style="color:#fff;">AR</a>
+        <a href="#" data-lang="en" style="color:#fff;">EN</a>
+      </div>
+      <button class="btn btn-outline btn-sm" id="logout-btn" style="width:100%; color:#fff; border-color:rgba(255,255,255,.3);" data-i18n="admin_logout">تسجيل الخروج</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2 style="margin:0;" id="view-title" data-i18n="admin_today">حجوزات اليوم</h2>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" id="add-company-btn" data-i18n="admin_add_company">إضافة شركة</button>
+        <button class="btn btn-outline btn-sm" id="block-slot-btn" data-i18n="admin_close_slot">إغلاق وقت</button>
+        <button class="btn btn-outline btn-sm" id="export-toggle-btn" data-i18n="admin_export_range">تحديد مدة التصدير</button>
+      </div>
+    </div>
+
+    <div class="card hidden" id="export-range-box" style="padding:16px; margin-bottom:16px;">
+      <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
+        <div>
+          <label class="field-label" data-i18n="admin_export_from">من تاريخ</label>
+          <input class="input" type="date" id="export-from" style="max-width:170px;">
+        </div>
+        <div>
+          <label class="field-label" data-i18n="admin_export_to">إلى تاريخ</label>
+          <input class="input" type="date" id="export-to" style="max-width:170px;">
+        </div>
+        <button class="btn btn-primary btn-sm" id="export-btn" data-i18n="admin_export">تصدير CSV</button>
+      </div>
+      <p style="font-size:12px; color:var(--ink-soft); margin:10px 0 0;" data-i18n="admin_export_hint"></p>
+    </div>
+
+    <div class="stat-cards">
+      <div class="stat-card"><div class="num" id="stat-today">–</div><div class="lbl" data-i18n="admin_stat_today"></div></div>
+      <div class="stat-card"><div class="num" id="stat-week">–</div><div class="lbl" data-i18n="admin_stat_week"></div></div>
+      <div class="stat-card"><div class="num" id="stat-rooms">–</div><div class="lbl" data-i18n="admin_stat_rooms"></div></div>
+      <div class="stat-card"><div class="num" id="stat-hours">–</div><div class="lbl" data-i18n="admin_stat_hours"></div></div>
+    </div>
+
+    <div class="admin-filters">
+      <input class="input" id="search-input" data-i18n-placeholder="admin_search_ph" style="max-width:220px;">
+      <select class="select" id="room-filter"><option value="" data-i18n="admin_filter_room">كل القاعات</option></select>
+      <select class="select" id="company-filter"><option value="" data-i18n="admin_filter_company">كل الشركات</option></select>
+      <input class="input" type="date" id="date-filter" style="max-width:180px;">
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th data-i18n="admin_col_time">الوقت</th>
+          <th data-i18n="admin_col_room">القاعة</th>
+          <th data-i18n="admin_col_customer">الشركة</th>
+          <th data-i18n="admin_col_email">البريد</th>
+          <th data-i18n="admin_col_status">الحالة</th>
+          <th data-i18n="admin_col_actions">إجراءات</th>
+        </tr>
+      </thead>
+      <tbody id="bookings-tbody"></tbody>
+    </table>
+  </main>
+</div>
+
+<!-- add-company modal -->
+<div class="modal-backdrop hidden" id="company-modal">
+  <div class="modal">
+    <h3 style="margin-top:0;" data-i18n="admin_add_company">إضافة شركة</h3>
+    <label class="field-label" data-i18n="label_company">اسم الشركة</label>
+    <input class="input" id="new-company-name" style="margin-bottom:16px;">
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-primary btn-sm" id="company-save" data-i18n="btn_add_guest">إضافة</button>
+      <button class="btn btn-outline btn-sm" id="company-cancel" data-i18n="btn_back">رجوع</button>
+    </div>
+  </div>
+</div>
+
+<!-- edit-booking modal -->
+<div class="modal-backdrop hidden" id="edit-booking-modal">
+  <div class="modal">
+    <h3 style="margin-top:0;" data-i18n="admin_edit_booking">تعديل الحجز</h3>
+    <label class="field-label" data-i18n="label_company"></label>
+    <select class="select" id="edit-booking-company" style="margin-bottom:12px;"></select>
+    <label class="field-label" data-i18n="label_date"></label>
+    <input class="input" type="date" id="edit-booking-date" style="margin-bottom:12px;">
+    <div style="display:flex; gap:10px; margin-bottom:16px;">
+      <div style="flex:1;">
+        <label class="field-label">Start</label>
+        <input class="input" type="time" id="edit-booking-start">
+      </div>
+      <div style="flex:1;">
+        <label class="field-label">End</label>
+        <input class="input" type="time" id="edit-booking-end">
+      </div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-primary btn-sm" id="edit-booking-save" data-i18n="btn_confirm_booking">حفظ</button>
+      <button class="btn btn-outline btn-sm" id="edit-booking-cancel" data-i18n="btn_back">رجوع</button>
+    </div>
+  </div>
+</div>
+
+<!-- block-slot modal -->
+<div class="modal-backdrop hidden" id="block-modal">
+  <div class="modal">
+    <h3 style="margin-top:0;" data-i18n="admin_close_slot">إغلاق وقت</h3>
+    <label class="field-label" data-i18n="label_room"></label>
+    <select class="select" id="block-room" style="margin-bottom:12px;"></select>
+    <label class="field-label" data-i18n="label_date"></label>
+    <input class="input" type="date" id="block-date" style="margin-bottom:12px;">
+    <div style="display:flex; gap:10px; margin-bottom:16px;">
+      <div style="flex:1;">
+        <label class="field-label">Start</label>
+        <input class="input" type="time" id="block-start">
+      </div>
+      <div style="flex:1;">
+        <label class="field-label">End</label>
+        <input class="input" type="time" id="block-end">
+      </div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-primary btn-sm" id="block-save" data-i18n="admin_close_slot"></button>
+      <button class="btn btn-outline btn-sm" id="block-cancel" data-i18n="btn_back"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase-client.js"></script>
+<script src="../js/i18n.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>
