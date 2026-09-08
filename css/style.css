@@ -505,7 +505,13 @@ textarea{ resize: vertical; min-height: 84px; }
 .admin-filters{ display:flex; gap: 10px; flex-wrap:wrap; margin-bottom: var(--space-4); }
 .admin-filters .select, .admin-filters .input{ width:auto; min-width:160px; }
 
-table.data-table{ width:100%; border-collapse: collapse; background:var(--surface); border-radius: var(--radius-md); overflow:hidden; }
+.table-scroll{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+table.data-table{ width:100%; min-width: 720px; border-collapse: collapse; background:var(--surface); }
 table.data-table th, table.data-table td{
   text-align: start;
   padding: 12px 14px;
@@ -563,6 +569,39 @@ tr.row-cancelled td{ opacity:.5; text-decoration: line-through; }
 
 @media (max-width: 900px){
   .admin-shell{ flex-direction:column; }
-  .admin-sidebar{ width:100%; display:flex; align-items:center; justify-content:space-between; }
+  .admin-sidebar{ width:100%; display:flex; align-items:center; justify-content:space-between; gap: var(--space-4); }
   .admin-nav{ display:flex; gap:6px; }
+  .admin-main{ padding: var(--space-4); max-width: none; }
+}
+
+/* لوحة تحكم على شاشة جوال */
+@media (max-width: 600px){
+  .admin-sidebar{
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+  .admin-sidebar .brand{ justify-content:center; }
+  .admin-nav{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding-bottom: 4px;
+  }
+  .admin-nav a{ white-space: nowrap; margin-bottom:0; }
+  .admin-sidebar > div[style]{ margin-top:0 !important; display:flex; gap:8px; align-items:center; }
+  .admin-sidebar > div[style] .lang-toggle{ margin-bottom:0 !important; }
+  .admin-sidebar > div[style] #logout-btn{ width:auto !important; white-space:nowrap; }
+
+  .admin-topbar{ flex-direction: column; align-items: stretch; }
+  .admin-topbar h2{ text-align:center; }
+  .admin-topbar > div{ justify-content:center; }
+
+  .stat-cards{ grid-template-columns: repeat(2,1fr); gap: var(--space-3); }
+  .stat-card{ padding: var(--space-3); }
+  .stat-card .num{ font-size: 22px; }
+
+  .admin-filters{ flex-direction: column; align-items:stretch; }
+  .admin-filters .select, .admin-filters .input{ width:100%; min-width:0; }
 }
