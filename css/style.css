@@ -110,7 +110,7 @@ img{ max-width: 100%; display:block; }
   width: 40px;
 
   background-image: url("../assets/img/pattern.png");
-  background-repeat: repeat-y;
+  background-repeat: no- repeat;
   background-size: 40px auto;
   opacity: .55;
   pointer-events: none;
