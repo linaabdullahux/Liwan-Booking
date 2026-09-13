@@ -16,7 +16,10 @@ function icsFor(booking){
     `LOCATION:${roomName}`,
     "END:VEVENT","END:VCALENDAR"
   ].join("\r\n");
-  return "data:text/calendar;charset=utf8," + encodeURIComponent(body);
+  // Blob URL بدل data: URI — أوثق لفتح الملف مباشرة بتطبيق التقويم
+  // (خاصية download بالـ HTML هي اللي كانت تجبر المتصفح ينزّله بدل ما يفتحه)
+  const blob = new Blob([body], { type: "text/calendar;charset=utf-8" });
+  return URL.createObjectURL(blob);
 }
 
 function renderBooking(b){
