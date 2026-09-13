@@ -499,7 +499,37 @@ textarea{ resize: vertical; min-height: 84px; }
   color: rgba(255,255,255,.75); font-size:14px; margin-bottom:4px;
 }
 .admin-nav a.active, .admin-nav a:hover{ background: rgba(255,255,255,.12); color:var(--white); }
-.admin-main{ flex:1; padding: var(--space-5) var(--space-6); max-width: 1180px; }
+.admin-main{ flex:1; padding: var(--space-5) var(--space-6); padding-left: 64px; max-width: 1180px; }
+
+/* شريط النقش الزخرفي — حافة يسار لوحة التحكم */
+.admin-pattern-rail{
+  position: fixed;
+  top: 0; bottom: 0; left: 0;
+  width: 40px;
+  background-image: url("../assets/img/pattern.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+  opacity: .45;
+  pointer-events: none;
+  z-index: 0;
+}
+@media (max-width: 900px){
+  .admin-pattern-rail{ display: none; }
+}
+
+.chart-cards{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+@media (max-width: 820px){
+  .chart-cards{ grid-template-columns: 1fr; }
+}
+.chart-card h3{ margin: 0 0 var(--space-3); font-size: 15px; }
+.chart-canvas-wrap{ position: relative; height: 220px; }
+.chart-summary{ text-align: center; margin: var(--space-3) 0 0; font-size: 13px; color: var(--ink-soft); }
 
 .admin-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-5); flex-wrap:wrap; gap:12px; }
 .admin-filters{ display:flex; gap: 10px; flex-wrap:wrap; margin-bottom: var(--space-4); }
