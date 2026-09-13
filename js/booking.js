@@ -8,7 +8,7 @@
    booking the same slot can never produce two bookings.
    ========================================================= */
 
-const DURATIONS = [10,15,30,45,60,120,180,240,300,360]; // minutes
+const DURATIONS = [30,45,60,120,180,240,300,360]; // minutes — 30 دقيقة أقل مدة متاحة
 const SLOT_STEP_MIN = 10; // granularity for candidate start times
 const TZ = "Asia/Riyadh"; // fixed business timezone — Riyadh has no DST, so +03:00 is always correct
 
@@ -57,8 +57,8 @@ async function initRoom(){
     state.rooms = await apiGetRooms();
   }catch(e){
     state.rooms = [
-      { id: "meeting", slug:"meeting", name_ar:"قاعة الاجتماعات", name_en:"Meeting Room", open_time:"08:00:00", close_time:"22:00:00" },
-      { id: "brainstorm", slug:"brainstorm", name_ar:"قاعة العصف الذهني", name_en:"Brainstorming Room", open_time:"08:00:00", close_time:"22:00:00" },
+      { id: "meeting", slug:"meeting", name_ar:"قاعة الاجتماعات التنفيذية", name_en:"Executive Meeting Room", open_time:"08:00:00", close_time:"23:59:00" },
+      { id: "brainstorm", slug:"brainstorm", name_ar:"قاعة العصف الذهني", name_en:"Brainstorming Room", open_time:"08:00:00", close_time:"23:59:00" },
     ];
     console.warn("Using placeholder rooms — connect Supabase to go live.", e);
   }
@@ -147,7 +147,7 @@ async function loadSlots(){
     return;
   }
 
-  const locale = getLang()==="en" ? "en-US" : "ar-SA";
+  const locale = getLang()==="en" ? "en-US" : "ar-SA-u-nu-latn";
   timeGrid.innerHTML = slots.map((s,i) => `
     <button type="button" class="time-slot ${s.busy?'busy':''}" data-i="${i}" ${s.busy?'disabled':''}>
       ${s.start.toLocaleTimeString(locale, {hour:'2-digit', minute:'2-digit', timeZone: TZ})}
@@ -214,7 +214,7 @@ document.getElementById("to-step-3").addEventListener("click", ()=>{
 
 /* ---------- Step 3: review + submit ---------- */
 function renderSummary(){
-  const locale = getLang()==="en" ? "en-US" : "ar-SA";
+  const locale = getLang()==="en" ? "en-US" : "ar-SA-u-nu-latn";
   const start = new Date(state.start), end = new Date(state.end);
   const companySelect = document.getElementById("cust-company");
   const companyName = companySelect.options[companySelect.selectedIndex]?.text || "";

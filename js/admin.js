@@ -77,7 +77,7 @@ async function refreshTable(){
   currentRows = rows;
 
   const tbody = document.getElementById("bookings-tbody");
-  const locale = getLang()==="en" ? "en-US":"ar-SA";
+  const locale = getLang()==="en" ? "en-US":"ar-SA-u-nu-latn";
   tbody.innerHTML = rows.map(b=>{
     const start = new Date(b.start_time), end = new Date(b.end_time);
     const roomName = b.rooms ? (getLang()==="en"?b.rooms.name_en:b.rooms.name_ar) : "";
@@ -103,7 +103,7 @@ async function refreshTable(){
     btn.addEventListener("click", async ()=>{
       if (!confirm(t("cancel_confirm_q"))) return;
       await apiAdminCancelBooking(btn.getAttribute("data-cancel"));
-      refreshTable(); refreshStats();
+      refreshTable(); refreshStats(); refreshCharts();
     });
   });
   tbody.querySelectorAll("[data-reopen]").forEach(btn=>{
@@ -135,6 +135,115 @@ async function refreshStats(){
   }catch(e){ console.error(e); }
 }
 
+// ألوان هوية ليوان أرُب — نفس القيم المستخدمة بباقي الموقع
+const CHART_COLORS = ["#554835", "#6F141A", "#3B7984", "#A9A14B", "#597261", "#C9D7C8"];
+const MONTHLY_FREE_HOURS = 6; // الحد المجاني لكل شركة بالشهر
+
+let periodChart = null;
+let companyChart = null;
+
+async function refreshCharts(){
+  try{
+    const today = isoRangeFor("today");
+    const week = isoRangeFor("week");
+    const month = isoRangeFor("month");
+
+    const [todayRows, weekRows, monthRows] = await Promise.all([
+      apiAdminGetBookings({ from: today.from, to: today.to }),
+      apiAdminGetBookings({ from: week.from, to: week.to }),
+      apiAdminGetBookings({ from: month.from, to: month.to }),
+    ]);
+    const cToday = todayRows.filter(b=>b.status==="confirmed").length;
+    const cWeek = weekRows.filter(b=>b.status==="confirmed").length;
+    const cMonth = monthRows.filter(b=>b.status==="confirmed").length;
+
+    renderPeriodChart(cToday, cWeek, cMonth);
+
+    const companyId = document.getElementById("company-filter").value;
+    if (companyId){
+      renderCompanyQuotaChart(monthRows, companyId);
+    } else {
+      renderCompanyShareChart(monthRows);
+    }
+  }catch(e){ console.error(e); }
+}
+
+function renderPeriodChart(cToday, cWeek, cMonth){
+  const ctx = document.getElementById("chart-period");
+  const data = {
+    labels: [t('admin_stat_today'), t('admin_stat_week'), t('admin_period_month')],
+    datasets: [{ data: [cToday, cWeek, cMonth], backgroundColor: CHART_COLORS, borderWidth: 0 }],
+  };
+  if (periodChart){ periodChart.data = data; periodChart.update(); return; }
+  periodChart = new Chart(ctx, {
+    type: "doughnut",
+    data,
+    options: {
+      plugins: { legend: { position: "bottom", labels: { font: { family: "Tahoma" } } } },
+      cutout: "62%",
+    },
+  });
+}
+
+function renderCompanyShareChart(monthRows){
+  document.getElementById("chart-company-title").textContent = t("admin_chart_company");
+  document.getElementById("chart-company-summary").textContent = "";
+
+  const byCompany = {};
+  monthRows.filter(b=>b.status==="confirmed").forEach(b=>{
+    const name = b.customer_name || t("admin_no_company");
+    byCompany[name] = (byCompany[name]||0) + 1;
+  });
+  const labels = Object.keys(byCompany);
+  const values = Object.values(byCompany);
+
+  const data = {
+    labels: labels.length ? labels : [t("admin_no_data")],
+    datasets: [{ data: values.length ? values : [1], backgroundColor: CHART_COLORS, borderWidth: 0 }],
+  };
+  if (companyChart){ companyChart.destroy(); }
+  companyChart = new Chart(document.getElementById("chart-company"), {
+    type: "doughnut",
+    data,
+    options: {
+      plugins: { legend: { position: "bottom", labels: { font: { family: "Tahoma" } } } },
+      cutout: "62%",
+    },
+  });
+}
+
+function renderCompanyQuotaChart(monthRows, companyId){
+  const company = allCompanies.find(c => c.id === companyId);
+  const companyName = company ? company.name : "";
+  document.getElementById("chart-company-title").textContent = `${t("admin_chart_quota")} — ${companyName}`;
+
+  const usedHours = monthRows
+    .filter(b => b.status === "confirmed" && b.company_id === companyId)
+    .reduce((sum,b)=> sum + (new Date(b.end_time)-new Date(b.start_time))/3600000, 0);
+
+  const remaining = Math.max(MONTHLY_FREE_HOURS - usedHours, 0);
+  const overage = Math.max(usedHours - MONTHLY_FREE_HOURS, 0);
+
+  const values = overage > 0 ? [MONTHLY_FREE_HOURS, overage] : [usedHours, remaining];
+  const labels = overage > 0 ? [t("admin_quota_used"), t("admin_quota_overage")] : [t("admin_quota_used"), t("admin_quota_remaining")];
+  const colors = overage > 0 ? [CHART_COLORS[0], CHART_COLORS[1]] : [CHART_COLORS[0], CHART_COLORS[4]];
+
+  const data = { labels, datasets: [{ data: values, backgroundColor: colors, borderWidth: 0 }] };
+  if (companyChart){ companyChart.destroy(); }
+  companyChart = new Chart(document.getElementById("chart-company"), {
+    type: "doughnut",
+    data,
+    options: {
+      plugins: { legend: { position: "bottom", labels: { font: { family: "Tahoma" } } } },
+      cutout: "62%",
+    },
+  });
+
+  const pct = Math.round((usedHours / MONTHLY_FREE_HOURS) * 100);
+  document.getElementById("chart-company-summary").textContent =
+    `${usedHours.toFixed(1)} ${t("admin_of")} ${MONTHLY_FREE_HOURS} ${t("admin_hours_used")} (${pct}%)`;
+}
+
 document.querySelectorAll(".admin-nav a[data-filter]").forEach(a=>{
   a.addEventListener("click", (e)=>{
     e.preventDefault();
@@ -144,11 +253,12 @@ document.querySelectorAll(".admin-nav a[data-filter]").forEach(a=>{
     document.getElementById("date-filter").value = "";
     document.getElementById("view-title").textContent = a.textContent;
     refreshTable();
+    refreshCharts();
   });
 });
 document.getElementById("search-input").addEventListener("input", ()=>refreshTable());
 document.getElementById("room-filter").addEventListener("change", ()=>refreshTable());
-document.getElementById("company-filter").addEventListener("change", ()=>refreshTable());
+document.getElementById("company-filter").addEventListener("change", ()=>{ refreshTable(); refreshCharts(); });
 document.getElementById("date-filter").addEventListener("change", ()=>refreshTable());
 
 document.getElementById("logout-btn").addEventListener("click", async ()=>{
@@ -216,6 +326,7 @@ document.getElementById("edit-booking-save").addEventListener("click", async ()=
     );
     modal.classList.add("hidden");
     refreshTable();
+    refreshCharts();
   }catch(e){
     const msg = String(e.message||e);
     alert((msg.includes("23P01") || msg.toLowerCase().includes("exclu")) ? t("error_double_book") : t("error_generic") + " (" + msg + ")");
@@ -243,8 +354,10 @@ document.getElementById("block-save").addEventListener("click", async ()=>{
     });
     document.getElementById("block-modal").classList.add("hidden");
     refreshTable();
+    refreshCharts();
   }catch(e){
-    alert(t("error_generic") + " (" + (e.message||e) + ")");
+    const msg = String(e.message||e);
+    alert((msg.includes("23P01") || msg.toLowerCase().includes("exclu")) ? t("error_double_book") : t("error_generic") + " (" + msg + ")");
   }
 });
 
@@ -261,7 +374,7 @@ document.getElementById("export-btn").addEventListener("click", async ()=>{
     const to = toVal ? new Date(`${toVal}T23:59:59+03:00`).toISOString() : undefined; // include the whole "to" day
 
     const rows = await apiAdminExportCSV({ from, to });
-    const locale = getLang()==="en" ? "en-US" : "ar-SA";
+    const locale = getLang()==="en" ? "en-US" : "ar-SA-u-nu-latn";
 
     // Columns in the exact order requested: room, date, time, company
     // name, email, status — plus the booking's own notes as a bonus.
@@ -327,4 +440,5 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   await loadFilters();
   await refreshTable();
   await refreshStats();
+  await refreshCharts();
 });
