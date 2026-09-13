@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
+<div class="admin-pattern-rail"></div>
 <div class="admin-shell">
   <aside class="admin-sidebar">
     <a class="brand" href="../index.html">
@@ -57,6 +58,18 @@
       <div class="stat-card"><div class="num" id="stat-week">–</div><div class="lbl" data-i18n="admin_stat_week"></div></div>
       <div class="stat-card"><div class="num" id="stat-rooms">–</div><div class="lbl" data-i18n="admin_stat_rooms"></div></div>
       <div class="stat-card"><div class="num" id="stat-hours">–</div><div class="lbl" data-i18n="admin_stat_hours"></div></div>
+    </div>
+
+    <div class="chart-cards">
+      <div class="card chart-card">
+        <h3 data-i18n="admin_chart_period">توزيع الحجوزات</h3>
+        <div class="chart-canvas-wrap"><canvas id="chart-period"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <h3 id="chart-company-title" data-i18n="admin_chart_company">الحجوزات حسب الشركة (هذا الشهر)</h3>
+        <div class="chart-canvas-wrap"><canvas id="chart-company"></canvas></div>
+        <p id="chart-company-summary" class="chart-summary"></p>
+      </div>
     </div>
 
     <div class="admin-filters">
@@ -148,6 +161,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="../js/supabase-client.js"></script>
 <script src="../js/i18n.js"></script>
 <script src="../js/admin.js"></script>
