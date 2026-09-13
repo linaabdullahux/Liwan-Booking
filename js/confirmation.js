@@ -16,10 +16,24 @@ function icsFor(booking){
     `LOCATION:${roomName}`,
     "END:VEVENT","END:VCALENDAR"
   ].join("\r\n");
-  // Blob URL بدل data: URI — أوثق لفتح الملف مباشرة بتطبيق التقويم
-  // (خاصية download بالـ HTML هي اللي كانت تجبر المتصفح ينزّله بدل ما يفتحه)
+  // Blob URL — يُستخدم للتنزيل الصريح (Outlook / Apple Calendar) عبر رابط منفصل
   const blob = new Blob([body], { type: "text/calendar;charset=utf-8" });
   return URL.createObjectURL(blob);
+}
+
+// رابط مباشر لتقويم Google — يفتح شاشة "إضافة حدث" جاهزة بكل التفاصيل،
+// بضغطة وحدة يحفظها المستخدم (يشتغل مباشر على أندرويد/Gmail بدون تنزيل ملف).
+function googleCalendarUrl(booking){
+  const toICS = d => new Date(d).toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+  const roomName = getLang()==="en" ? booking.room_name_en : booking.room_name_ar;
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: `${roomName} — ${t('site_name')}`,
+    dates: `${toICS(booking.start_time)}/${toICS(booking.end_time)}`,
+    details: t('site_name'),
+    location: roomName,
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
 function renderBooking(b){
@@ -38,7 +52,8 @@ function renderBooking(b){
     <div class="summary-row"><span class="k">${t('summary_company')}</span><span class="v">${b.customer_name||''}</span></div>
     <div class="summary-row"><span class="k">${t('summary_email')}</span><span class="v">${b.customer_email||''}</span></div>
   `;
-  document.getElementById("ics-link").setAttribute("href", icsFor(b));
+  document.getElementById("ics-link").setAttribute("href", googleCalendarUrl(b));
+  document.getElementById("ics-download-link").setAttribute("href", icsFor(b));
 
   const statusBox = document.getElementById("status-alert");
   const actions = document.querySelector(".confirm-actions");
