@@ -195,7 +195,14 @@ function renderPeriodChart(cToday, cWeek, cMonth){
     type: "doughnut",
     data,
     options: {
-      plugins: { legend: { position: "bottom", labels: { font: { family: "Tahoma" } } } },
+      plugins: {
+        legend: {
+          position: "right",
+          rtl: getLang() !== "en",
+          textDirection: getLang() === "en" ? "ltr" : "rtl",
+          labels: { font: { family: "Tahoma" }, boxWidth: 14, padding: 12 },
+        },
+      },
       cutout: "62%",
     },
   });
@@ -222,7 +229,14 @@ function renderCompanyShareChart(monthRows){
     type: "doughnut",
     data,
     options: {
-      plugins: { legend: { position: "bottom", labels: { font: { family: "Tahoma" } } } },
+      plugins: {
+        legend: {
+          position: "right",
+          rtl: getLang() !== "en",
+          textDirection: getLang() === "en" ? "ltr" : "rtl",
+          labels: { font: { family: "Tahoma" }, boxWidth: 14, padding: 12 },
+        },
+      },
       cutout: "62%",
     },
   });
@@ -250,7 +264,14 @@ function renderCompanyQuotaChart(monthRows, companyId){
     type: "doughnut",
     data,
     options: {
-      plugins: { legend: { position: "bottom", labels: { font: { family: "Tahoma" } } } },
+      plugins: {
+        legend: {
+          position: "right",
+          rtl: getLang() !== "en",
+          textDirection: getLang() === "en" ? "ltr" : "rtl",
+          labels: { font: { family: "Tahoma" }, boxWidth: 14, padding: 12 },
+        },
+      },
       cutout: "62%",
     },
   });
