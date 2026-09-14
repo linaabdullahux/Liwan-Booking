@@ -197,13 +197,13 @@ function renderPeriodChart(cToday, cWeek, cMonth){
     options: {
       plugins: {
         legend: {
-          position: "right",
+          position: getLang() === "en" ? "right" : "left", // بالعربي: الشارت يمين والمعلومات يسار
           rtl: getLang() !== "en",
           textDirection: getLang() === "en" ? "ltr" : "rtl",
           labels: { font: { family: "Tahoma" }, boxWidth: 14, padding: 12 },
         },
       },
-      cutout: "62%",
+      cutout: "55%",
     },
   });
 }
@@ -231,13 +231,13 @@ function renderCompanyShareChart(monthRows){
     options: {
       plugins: {
         legend: {
-          position: "right",
+          position: getLang() === "en" ? "right" : "left", // بالعربي: الشارت يمين والمعلومات يسار
           rtl: getLang() !== "en",
           textDirection: getLang() === "en" ? "ltr" : "rtl",
           labels: { font: { family: "Tahoma" }, boxWidth: 14, padding: 12 },
         },
       },
-      cutout: "62%",
+      cutout: "55%",
     },
   });
 }
@@ -266,13 +266,13 @@ function renderCompanyQuotaChart(monthRows, companyId){
     options: {
       plugins: {
         legend: {
-          position: "right",
+          position: getLang() === "en" ? "right" : "left", // بالعربي: الشارت يمين والمعلومات يسار
           rtl: getLang() !== "en",
           textDirection: getLang() === "en" ? "ltr" : "rtl",
           labels: { font: { family: "Tahoma" }, boxWidth: 14, padding: 12 },
         },
       },
-      cutout: "62%",
+      cutout: "55%",
     },
   });
 
