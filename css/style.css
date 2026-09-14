@@ -528,7 +528,7 @@ textarea{ resize: vertical; min-height: 84px; }
   .chart-cards{ grid-template-columns: 1fr; }
 }
 .chart-card h3{ margin: 0 0 var(--space-3); font-size: 15px; text-align: center; }
-.chart-canvas-wrap{ position: relative; height: 220px; }
+.chart-canvas-wrap{ position: relative; height: 240px; }
 .chart-summary{ text-align: center; margin: var(--space-3) 0 0; font-size: 13px; color: var(--ink-soft); }
 
 .admin-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--space-5); flex-wrap:wrap; gap:12px; }
