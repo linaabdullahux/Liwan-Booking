@@ -3,6 +3,24 @@ let allCompanies = [];
 let currentFilter = "today";
 const TZ = "Asia/Riyadh"; // the business's fixed timezone — always display in this zone, regardless of the viewer's device settings
 
+function riyadhTodayYMD(){
+  return new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date());
+}
+
+// الأسبوع من الأحد إلى السبت (مو ٧ أيام متدحرجة من اليوم) — بتوقيت الرياض دائمًا
+function weekRangeRiyadh(){
+  const [y,m,d] = riyadhTodayYMD().split("-").map(Number);
+  const anchor = new Date(Date.UTC(y, m-1, d, 12)); // ظهر UTC، بس لحساب اليوم بالأسبوع بأمان
+  const dow = anchor.getUTCDay(); // الأحد=0 ... السبت=6
+  const sunday = new Date(anchor); sunday.setUTCDate(sunday.getUTCDate() - dow);
+  const nextSunday = new Date(sunday); nextSunday.setUTCDate(nextSunday.getUTCDate() + 7);
+  const toYMD = dt => `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,"0")}-${String(dt.getUTCDate()).padStart(2,"0")}`;
+  return {
+    from: new Date(`${toYMD(sunday)}T00:00:00+03:00`).toISOString(),
+    to: new Date(`${toYMD(nextSunday)}T00:00:00+03:00`).toISOString(),
+  };
+}
+
 function isoRangeFor(filter){
   const now = new Date();
   if (filter === "today"){
@@ -11,9 +29,7 @@ function isoRangeFor(filter){
     return { from: start.toISOString(), to: end.toISOString() };
   }
   if (filter === "week"){
-    const start = new Date(now); start.setHours(0,0,0,0);
-    const end = new Date(start); end.setDate(end.getDate()+7);
-    return { from: start.toISOString(), to: end.toISOString() };
+    return weekRangeRiyadh();
   }
   if (filter === "month"){
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
