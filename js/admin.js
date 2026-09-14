@@ -204,6 +204,8 @@ function renderPeriodChart(cToday, cWeek, cMonth){
         },
       },
       cutout: "55%",
+      responsive: true,
+      maintainAspectRatio: false, // يخلي الشارت يملأ صندوقه بالكامل بدل ما يترك مساحة فاضية
     },
   });
 }
@@ -238,6 +240,8 @@ function renderCompanyShareChart(monthRows){
         },
       },
       cutout: "55%",
+      responsive: true,
+      maintainAspectRatio: false, // يخلي الشارت يملأ صندوقه بالكامل بدل ما يترك مساحة فاضية
     },
   });
 }
@@ -273,6 +277,8 @@ function renderCompanyQuotaChart(monthRows, companyId){
         },
       },
       cutout: "55%",
+      responsive: true,
+      maintainAspectRatio: false, // يخلي الشارت يملأ صندوقه بالكامل بدل ما يترك مساحة فاضية
     },
   });
 
