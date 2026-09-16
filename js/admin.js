@@ -62,6 +62,7 @@ async function loadFilters(){
   const companyOpts = allCompanies.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
   companyFilter.innerHTML = `<option value="">${t('admin_filter_company')}</option>` + companyOpts;
   document.getElementById("edit-booking-company").innerHTML = companyOpts;
+  document.getElementById("quota-company").innerHTML = companyOpts;
 }
 
 function statusBadge(status){
@@ -153,7 +154,7 @@ async function refreshStats(){
 
 // ألوان هوية ليوان أرُب — نفس القيم المستخدمة بباقي الموقع
 const CHART_COLORS = ["#554835", "#6F141A", "#3B7984", "#A9A14B", "#597261", "#C9D7C8"];
-const MONTHLY_FREE_HOURS = 6; // الحد المجاني لكل شركة بالشهر
+const DEFAULT_FREE_HOURS = 6; // يُستخدم فقط لو الشركة ما لها قيمة محفوظة بعد
 
 let periodChart = null;
 let companyChart = null;
@@ -249,16 +250,17 @@ function renderCompanyShareChart(monthRows){
 function renderCompanyQuotaChart(monthRows, companyId){
   const company = allCompanies.find(c => c.id === companyId);
   const companyName = company ? company.name : "";
+  const freeHours = Number(company?.monthly_free_hours ?? DEFAULT_FREE_HOURS);
   document.getElementById("chart-company-title").textContent = `${t("admin_chart_quota")} — ${companyName}`;
 
   const usedHours = monthRows
     .filter(b => b.status === "confirmed" && b.company_id === companyId)
     .reduce((sum,b)=> sum + (new Date(b.end_time)-new Date(b.start_time))/3600000, 0);
 
-  const remaining = Math.max(MONTHLY_FREE_HOURS - usedHours, 0);
-  const overage = Math.max(usedHours - MONTHLY_FREE_HOURS, 0);
+  const remaining = Math.max(freeHours - usedHours, 0);
+  const overage = Math.max(usedHours - freeHours, 0);
 
-  const values = overage > 0 ? [MONTHLY_FREE_HOURS, overage] : [usedHours, remaining];
+  const values = overage > 0 ? [freeHours, overage] : [usedHours, remaining];
   const labels = overage > 0 ? [t("admin_quota_used"), t("admin_quota_overage")] : [t("admin_quota_used"), t("admin_quota_remaining")];
   const colors = overage > 0 ? [CHART_COLORS[0], CHART_COLORS[1]] : [CHART_COLORS[0], CHART_COLORS[4]];
 
@@ -282,9 +284,9 @@ function renderCompanyQuotaChart(monthRows, companyId){
     },
   });
 
-  const pct = Math.round((usedHours / MONTHLY_FREE_HOURS) * 100);
+  const pct = freeHours > 0 ? Math.round((usedHours / freeHours) * 100) : 0;
   document.getElementById("chart-company-summary").textContent =
-    `${usedHours.toFixed(1)} ${t("admin_of")} ${MONTHLY_FREE_HOURS} ${t("admin_hours_used")} (${pct}%)`;
+    `${usedHours.toFixed(1)} ${t("admin_of")} ${freeHours} ${t("admin_hours_used")} (${pct}%)`;
 }
 
 document.querySelectorAll(".admin-nav a[data-filter]").forEach(a=>{
@@ -324,6 +326,35 @@ document.getElementById("company-save").addEventListener("click", async ()=>{
     await apiAdminAddCompany(name);
     document.getElementById("company-modal").classList.add("hidden");
     await loadFilters(); // the new company is now available everywhere, including the public booking dropdown
+  }catch(e){
+    alert(t("error_generic") + " (" + (e.message||e) + ")");
+  }
+});
+
+/* ---------- edit-quota modal ---------- */
+function fillQuotaHoursField(){
+  const companyId = document.getElementById("quota-company").value;
+  const company = allCompanies.find(c => c.id === companyId);
+  document.getElementById("quota-hours").value = Number(company?.monthly_free_hours ?? DEFAULT_FREE_HOURS);
+}
+document.getElementById("edit-quota-btn").addEventListener("click", ()=>{
+  if (!allCompanies.length) return;
+  fillQuotaHoursField();
+  document.getElementById("quota-modal").classList.remove("hidden");
+});
+document.getElementById("quota-company").addEventListener("change", fillQuotaHoursField);
+document.getElementById("quota-cancel").addEventListener("click", ()=>{
+  document.getElementById("quota-modal").classList.add("hidden");
+});
+document.getElementById("quota-save").addEventListener("click", async ()=>{
+  const companyId = document.getElementById("quota-company").value;
+  const hours = Number(document.getElementById("quota-hours").value);
+  if (!companyId || isNaN(hours) || hours < 0) return;
+  try{
+    await apiAdminUpdateCompanyHours(companyId, hours);
+    document.getElementById("quota-modal").classList.add("hidden");
+    await loadFilters(); // يحدّث نسخة allCompanies المحفوظة محليًا بالقيمة الجديدة
+    refreshCharts();
   }catch(e){
     alert(t("error_generic") + " (" + (e.message||e) + ")");
   }

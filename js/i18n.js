@@ -48,6 +48,7 @@ const I18N = {
 
     btn_continue: "متابعة",
     btn_back: "رجوع",
+    btn_save: "حفظ",
     btn_confirm_booking: "تأكيد الحجز",
     btn_submitting: "جارِ التأكيد…",
 
@@ -134,6 +135,8 @@ const I18N = {
     admin_quota_overage: "تجاوز الحد المجاني",
     admin_of: "من",
     admin_hours_used: "ساعات مستخدمة",
+    admin_edit_quota: "الساعات المسموحة",
+    admin_quota_hours_label: "عدد الساعات المجانية بالشهر",
     status_confirmed: "مؤكد",
     status_cancelled: "ملغى",
     status_closed: "مغلق يدويًا",
@@ -197,6 +200,7 @@ const I18N = {
 
     btn_continue: "Continue",
     btn_back: "Back",
+    btn_save: "Save",
     btn_confirm_booking: "Confirm booking",
     btn_submitting: "Confirming…",
 
@@ -283,6 +287,8 @@ const I18N = {
     admin_quota_overage: "Over the free limit",
     admin_of: "of",
     admin_hours_used: "hours used",
+    admin_edit_quota: "Free hours",
+    admin_quota_hours_label: "Free hours per month",
     status_confirmed: "Confirmed",
     status_cancelled: "Cancelled",
     status_closed: "Manually closed",

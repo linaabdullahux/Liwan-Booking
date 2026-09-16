@@ -124,6 +124,11 @@ async function apiAdminAddCompany(name){
   return data;
 }
 
+async function apiAdminUpdateCompanyHours(companyId, hours){
+  const { error } = await sb.from("companies").update({ monthly_free_hours: hours }).eq("id", companyId);
+  if (error) throw error;
+}
+
 async function apiAdminBlockSlot({ roomId, start, end }){
   const { error } = await sb.from("bookings").insert({
     room_id: roomId, start_time: start, end_time: end, status: "blocked", customer_name: "مغلق يدويًا",
