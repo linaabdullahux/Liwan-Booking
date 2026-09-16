@@ -136,7 +136,7 @@ const I18N = {
     admin_of: "من",
     admin_hours_used: "ساعات مستخدمة",
     admin_edit_quota: "الساعات المسموحة",
-    admin_quota_hours_label: "عدد الساعات المجانية بالشهر",
+    admin_quota_hours_label: "عدد الساعات المسموحة بالشهر",
     status_confirmed: "مؤكد",
     status_cancelled: "ملغى",
     status_closed: "مغلق يدويًا",
