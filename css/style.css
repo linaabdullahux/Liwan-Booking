@@ -580,7 +580,7 @@ tr.row-cancelled td{ opacity:.5; text-decoration: line-through; }
   text-align:center;
   padding: var(--space-6) 0;
   color: var(--ink-soft);
-  font-size:13px;
+  font-size:9px;
 }
 .footer-credit{
   display:flex; align-items:center; justify-content:center; gap:6px;
@@ -641,11 +641,7 @@ tr.row-cancelled td{ opacity:.5; text-decoration: line-through; }
 }
 
 
-/* =====================================================================
-   Mobile fit — مقاسات الجوال
-   الهدف: نفس الهوية والألوان والخط والنقش، بس بمقاسات مرنة تناسب الشاشة
-   (تشتغل حتى لو الجوال مفعّل "حجم العرض/الخط الكبير" وصار العرض ~300px)
-   ===================================================================== */
+
 @media (max-width: 480px){
   :root{
     --header-h: 76px;
@@ -751,12 +747,7 @@ tr.row-cancelled td{ opacity:.5; text-decoration: line-through; }
   .room-card h3{ font-size: 16px; }
 }
 
-/* =====================================================================
-   Reveal Up — تدفق النصوص والكروت للأعلى عند فتح الصفحة
-   - الحركة: ينزلق العنصر من تحت لفوق مع ظهور تدريجي
-   - --d = تأخير كل عنصر (يعطي تتابع: عنوان ← وصف ← قاعاتنا ← الكروت)
-   - fill-mode: backwards → ما يتعارض مع حركة hover على الكروت
-   ===================================================================== */
+
 @keyframes reveal-up{
   from{ opacity: 0; transform: translateY(28px); filter: blur(4px); }
   to  { opacity: 1; transform: translateY(0);    filter: blur(0); }
