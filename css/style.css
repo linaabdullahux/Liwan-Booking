@@ -67,6 +67,7 @@
 
 /* Base Reset */
 *{ box-sizing: border-box; }
+html{ -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 html,body{ margin:0; padding:0; }
 
 /* اتجاه النص حسب اللغة */
@@ -126,9 +127,9 @@ img{ max-width: 100%; display:block; }
 /* Pattern Rail — خلف بطاقات الغرف */
 .pattern-rail{
   position: absolute;
-  top: 120px;
+  top: var(--header-h, 120px);
   bottom: 0;
-  width: 40px;
+  width: var(--rail-w, 40px);
 
   background-image: url("../assets/img/pattern.png");
   background-repeat: no-repeat;
@@ -160,7 +161,7 @@ html[lang="en"] .pattern-rail{
   align-items: center;
   justify-content: space-between;
 
-  height: 120px;
+  height: var(--header-h, 120px);
   background: var(--bg);
 
   box-shadow:
@@ -637,4 +638,115 @@ tr.row-cancelled td{ opacity:.5; text-decoration: line-through; }
 
   .admin-filters{ flex-direction: column; align-items:stretch; }
   .admin-filters .select, .admin-filters .input{ width:100%; min-width:0; }
+}
+
+
+/* =====================================================================
+   Mobile fit — مقاسات الجوال
+   الهدف: نفس الهوية والألوان والخط والنقش، بس بمقاسات مرنة تناسب الشاشة
+   (تشتغل حتى لو الجوال مفعّل "حجم العرض/الخط الكبير" وصار العرض ~300px)
+   ===================================================================== */
+@media (max-width: 480px){
+  :root{
+    --header-h: 76px;
+    --rail-w: 28px;
+    --logo-h: 84px;
+  }
+
+  /* الهيدر: أصغر وما ينضغط */
+  .site-header{
+    padding: 0 14px;
+    gap: 8px;
+  }
+  .brand{ flex: none; gap: 0; }
+  .brand-logo{
+    height: var(--logo-h) !important;
+    width: auto;
+    max-width: none;
+    flex: none;
+    /* الشعار فيه فراغ شفاف على الجنبين — نقصه عشان يوفر مساحة */
+    margin-inline: calc(var(--logo-h) * -0.3);
+  }
+  .header-nav{ gap: 6px; flex: none; }
+  .header-manage-link{
+    font-size: 12px;
+    padding: 5px 10px;
+    white-space: nowrap;
+    flex: none;
+  }
+  .lang-toggle{ flex: none; }
+  .lang-toggle a{ padding: 4px 9px; font-size: 11px; }
+
+  /* الحاوية: المسافة الكبيرة (48px) كانت تاكل العرض */
+  .container{
+    padding-inline: 18px;
+    /* من جهة الشريط الزخرفي (يمين بالعربي / يسار بالإنجليزي) */
+    padding-inline-start: calc(var(--rail-w) + 14px);
+  }
+
+  main.container{ padding-top: 16px; }
+
+  /* الهيرو */
+  .hero{ padding: 16px 0 20px; }
+  .hero h1{
+    font-size: clamp(22px, 7vw, 26px);
+    margin: 0 0 var(--space-3);
+  }
+  .hero p.lede{
+    font-size: clamp(14px, 4.2vw, 16px);
+    line-height: 1.7;
+    margin: 0 0 var(--space-4);
+  }
+  main h2{ font-size: 19px; margin: 0; }
+
+  /* كروت القاعات */
+  .rooms-grid{
+    gap: 12px;
+    margin: var(--space-4) auto var(--space-6);
+  }
+  .room-card{ padding: 14px; }
+  .room-card h3{ font-size: 17px; margin-bottom: 4px; }
+  .room-card p{ font-size: 13px; margin-bottom: var(--space-3); }
+
+  /* الأزرار والكروت الداخلية (صفحات الحجز والتأكيد) */
+  .btn{ padding: 11px 20px; font-size: 14px; }
+  .btn-sm{ padding: 7px 14px; font-size: 13px; }
+  .card{
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+    border-radius: 14px;
+  }
+  .card h2{ font-size: 16px; }
+  .select, .input, textarea{ padding: 10px 12px; font-size: 14px; }
+
+  .stepper{ gap: 6px; margin-bottom: var(--space-4); }
+  .step-pill{ font-size: 12px; padding: 5px 10px; gap: 6px; }
+  .step-pill .num{ width: 16px; height: 16px; font-size: 10px; }
+
+  .room-context{ font-size: 14px; margin-bottom: var(--space-3); }
+  .time-grid{ grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 6px; }
+  .time-slot, .duration-chip{ padding: 8px 4px; font-size: 12px; }
+  .summary-row{ font-size: 13px; gap: 12px; }
+  .confirm-actions .btn{ flex: 1 1 100%; }
+
+  .site-footer{ padding: var(--space-5) 0; font-size: 12px; }
+}
+
+/* شاشات صغيرة جدًا أو عرض مكبّر (≤ 340px) */
+@media (max-width: 340px){
+  :root{
+    --header-h: 68px;
+    --rail-w: 24px;
+    --logo-h: 72px;
+  }
+  .site-header{ padding: 0 10px; }
+  .header-manage-link{ font-size: 11px; padding: 4px 8px; }
+  .lang-toggle a{ padding: 3px 8px; font-size: 10px; }
+  .container{
+    padding-inline: 14px;
+    padding-inline-start: calc(var(--rail-w) + 12px);
+  }
+  .hero h1{ font-size: 21px; }
+  .hero p.lede{ font-size: 13.5px; }
+  .room-card h3{ font-size: 16px; }
 }
